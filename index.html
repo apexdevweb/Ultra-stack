@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050506">
+  <title>Ultra-Stack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <canvas id="c" aria-label="Nuée de particules générée à partir de ton image"></canvas>
+
+  <div id="ui">
+    <div class="tl keep">
+      <h1 class="primordial-title">Ultra-Stack</h1>
+      <div id="title">Dérive</div>
+      <div class="sm" id="l1">Modèle de profondeur · luminosité</div>
+      <div class="sm" id="l2">0 points</div>
+      <div class="sm">Nuée</div>
+    </div>
+
+    <div class="tr keep">
+      <button class="ib" id="fs" aria-label="Plein écran" title="Plein écran (F)"><svg viewBox="0 0 24 24">
+          <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" />
+        </svg></button>
+      <button class="ib" id="hide" aria-label="Masquer l’interface" title="Masquer / afficher l’interface (H)"><svg
+          viewBox="0 0 24 24">
+          <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" />
+          <circle cx="12" cy="12" r="2.8" />
+        </svg></button>
+      <button id="credBtn" class="lab" style="opacity:1;margin-top:10px">Générique</button>
+    </div>
+    <div id="credits" class="sm">Nuée est une création libre, inspirée par Gather · 聚 de DAO.<br>Profondeur : Depth
+      Anything V2 Small (Apache 2.0), via Transformers.js. Typographie : Manrope (OFL).</div>
+
+    <div id="thumbs"></div>
+
+    <div id="bottom">
+      <div class="col l">
+        <div class="line"><button id="next">▸ Suivant</button><span class="sm">Espace</span></div>
+        <div class="line"><button id="light" aria-pressed="true">● Lumière</button><span class="sm">S</span></div>
+        <div class="line"><label for="file" class="lab" style="cursor:pointer;padding:6px 0">Ajouter des
+            images</label><input id="file" type="file" accept="image/*" multiple hidden></div>
+        <div class="line"><button id="ai" aria-pressed="false">Profondeur IA</button><button id="hud"
+            aria-pressed="true">Cadre</button></div>
+      </div>
+
+      <div class="col c">
+        <div class="line">
+          <div class="fs"><span class="lab">Dérive</span><input id="fDrift" type="range" min="0" max="100" value="30"
+              aria-label="Dérive"></div>
+          <div class="fs"><span class="lab">Éclabousser</span><input id="fSplash" type="range" min="0" max="100"
+              value="35" aria-label="Éclabousser"></div>
+          <div class="fs"><span class="lab">Rassembler</span><input id="fGather" type="range" min="0" max="100"
+              value="40" aria-label="Rassembler"></div>
+          <div class="fs"><span class="lab">Profondeur</span><input id="fDepth" type="range" min="0" max="100"
+              value="60" aria-label="Profondeur"></div>
+        </div>
+        <div class="line">
+          <span class="lab">Dessiner</span>
+          <button id="track" aria-pressed="false">Piste</button>
+          <button id="links" aria-pressed="false">Liens</button>
+          <button id="scan" aria-pressed="false">Balayage</button>
+          <button id="trails" aria-pressed="false">Sentiers</button>
+          <button id="marks" aria-pressed="false">Marques</button>
+        </div>
+        <div class="line">
+          <span class="lab">Traqueurs</span>
+          <button id="sparse" class="on">Clairsemé</button>
+          <input id="trackers" class="w" type="range" min="30" max="900" step="10" value="150"
+            aria-label="Densité des traqueurs">
+          <button id="dense">Dense</button>
+          <span class="fs"><span class="lab">Ligne</span><input id="line" type="range" min="3" max="30" value="8"
+              aria-label="Épaisseur des lignes"></span>
+        </div>
+        <div class="line">
+          <span class="fs"><span class="lab">Particules</span><input id="density" class="w" type="range" min="3000"
+              max="100000" step="1000" value="50000" aria-label="Particules"></span>
+          <span class="fs"><span class="lab">Taille</span><input id="size" type="range" min="6" max="40" value="10"
+              aria-label="Taille"></span>
+          <button id="reset">Recentrer</button>
+        </div>
+      </div>
+
+      <div class="col r">
+        <div class="line" id="g-flow">
+          <button data-v="travel">Voyage</button><button data-v="swarm">Essaim</button><button
+            data-v="melt">Fondre</button>
+        </div>
+        <div class="line">
+          <button id="white" aria-pressed="false">Sur blanc</button>
+          <button id="neg" aria-pressed="false">Négatif</button>
+          <button id="true" aria-pressed="false">Vrai</button>
+        </div>
+        <div class="line"><span class="lab">Lumière</span>
+          <div class="dots" id="dots"></div>
+        </div>
+        <div class="line"><button id="png">Image PNG</button><button id="rec">Enregistrer ●</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="hint" class="sm">Dépose jusqu’à quatre images</div>
+  <div id="drop"><span class="sm">Dépose tes images ici</span></div>
+  <div id="status" class="sm"></div>
+
+  <script src="assets/js/globale.js"></script>
+</body>
+
+</html>
