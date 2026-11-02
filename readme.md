@@ -18,3 +18,5 @@ _____________________________________________________________
 |====> data-nuee-drag="true"          rotation 3D au glisser (désactivée par défaut pour ne pas bloquer le défilement)
 |
 |====> data-nuee-interactive="false"  arrête de calculer les distances à chaque micro-mouvement
+
+
