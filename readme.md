@@ -9,14 +9,14 @@ _____________________________________________________________
 |
 ## ↓↓↓  Attributs facultatifs sur le <div> ↓↓↓
 |
-|====> data-nuee-transparent="true"   fond transparent (la page se voit derrière)
+|====> data-nuee-transparent="true"   fond transparent (la page se voit derrière)<br>
 |
-|====> data-nuee-bg="#000000"         couleur de fond
+|====> data-nuee-bg="#000000"         couleur de fond<br>
 |
-|====> data-nuee-density="60000"      nombre de particules (remplace celui de la scène)
+|====> data-nuee-density="60000"      nombre de particules (remplace celui de la scène)<br>
 |
-|====> data-nuee-drag="true"          rotation 3D au glisser (désactivée par défaut pour ne pas bloquer le défilement)
+|====> data-nuee-drag="true"          rotation 3D au glisser (désactivée par défaut pour ne pas bloquer le défilement)<br>
 |
-|====> data-nuee-interactive="false"  arrête de calculer les distances à chaque micro-mouvement
+|====> data-nuee-interactive="false"  arrête de calculer les distances à chaque micro-mouvement<br>
 
 
