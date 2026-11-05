@@ -61,11 +61,20 @@ input[type="password"]{
   width: 8vw;
   margin: 5px;
   color: var(--fg);
+  border: 0.1em solid #000;
+  border-radius: 5px;
+  text-align: center;
 }
 input[type="submit"] {
   height: 2vh;
   width: auto;
   color: var(--fg);
+  text-align: center;
+}
+.log-info {
+  font-size: 0.9rem;
+  color: var(--fg);
+  letter-spacing: 1px;
 }
 /* Concept : un instrument d'observation. L'image devient nuée au centre d'un cadre gradué, l'interface se range en bordure. */
 :root {
@@ -477,6 +486,21 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @media (max-width: 980px) {
+  .login-container {
+    margin: 0;
+    flex-flow: column wrap;
+  }
+  input[type="text"],
+  input[type="password"]{
+    height: 3vh;
+    width: 12vw;
+    margin: 5px;
+  }
+  input[type="submit"] {
+    margin: 5px;
+    height: 3vh;
+    width: auto;
+  }
   #bottom {
     grid-template-columns: 1fr;
     gap: 12px;
