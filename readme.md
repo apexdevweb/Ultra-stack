@@ -20,3 +20,18 @@ _____________________________________________________________
 |====> data-nuee-interactive="false"  arrête de calculer les distances à chaque micro-mouvement<br>
 
 
+  // 1. Enregistrer une donnée dans la session
+  sessionStorage.setItem("clef", "valeur");
+  sessionStorage.setItem("username", "Alex");
+
+  // 2. Récupérer une donnée de la session
+  let user = sessionStorage.getItem("username");
+  console.log(user); // Affiche "Alex"
+
+  // 3. Supprimer une donnée spécifique
+  sessionStorage.removeItem("username");
+
+  // 4. Vider toutes les données de la session d'un coup
+  sessionStorage.clear();
+
+

@@ -18,12 +18,12 @@
 
   <div id="ui">
     <div class="tl keep">
-        <h1 class="alpha-title">Ultra-Stack</h1>
-        <small class="alpha-title__sub">Generative-design</small>
-        <hgroup class="info-content">
-          <h2 class="beta-title">Experimental-<br>Particules-<br>Module-</h2>
-          <small class="beta-title__sub">I.A optimisation performance</small>
-        </hgroup>
+      <h1 class="alpha-title">Ultra-Stack</h1>
+      <small class="alpha-title__sub">Generative-design</small>
+      <hgroup class="info-content">
+        <h2 class="beta-title">Experimental-<br>Particules-<br>Module-</h2>
+        <small class="beta-title__sub">I.A optimisation performance</small>
+      </hgroup>
       <div id="title">Dérive</div>
       <div class="sm" id="l1">Modèle de profondeur · luminosité</div>
       <div class="sm" id="l2">0 points</div>
@@ -31,6 +31,12 @@
     </div>
 
     <div class="tr keep">
+      <form id="login-form" class="login-container">
+        <input type="text" id="user-mail" placeholder="E-mail" maxlength="50" required>
+        <input type="password" id="user-pass" placeholder="Password" minlength="8" maxlength="16" required>
+        <input type="submit" value="connexion">
+        <p class="log-info" id="info-connexion"></p>
+      </form>
       <button class="ib" id="fs" aria-label="Plein écran" title="Plein écran (F)"><svg viewBox="0 0 24 24">
           <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" />
         </svg></button>
@@ -162,6 +168,7 @@
   <div id="drop"><span class="sm">Dépose tes images ici</span></div>
   <div id="status" class="sm"></div>
 
+  <script src="assets/js/storage.js"></script>
   <script src="assets/js/globale.js"></script>
 </body>
 

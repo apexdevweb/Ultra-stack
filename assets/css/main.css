@@ -16,7 +16,6 @@
   text-transform: uppercase;
   line-height: 30px;
   letter-spacing: 1px;
-
 }
 
 .alpha-title__sub {
@@ -46,6 +45,27 @@
   color: var(--fg);
   font-family: var(--font);
   text-transform: uppercase;
+}
+.login-container {
+  height: auto;
+  width: 100%;
+  padding: 5px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+input[type="text"],
+input[type="password"]{
+  height: 2vh;
+  width: 8vw;
+  margin: 5px;
+  color: var(--fg);
+}
+input[type="submit"] {
+  height: 2vh;
+  width: auto;
+  color: var(--fg);
 }
 /* Concept : un instrument d'observation. L'image devient nuée au centre d'un cadre gradué, l'interface se range en bordure. */
 :root {
