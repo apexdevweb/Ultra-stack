@@ -10,6 +10,8 @@
  *    data-nuee-density="60000"      nombre de particules (remplace celui de la scène)
  *    data-nuee-drag="true"          rotation 3D au glisser (désactivée par défaut pour ne pas bloquer le défilement)
  *    data-nuee-interactive="false"  aucune réaction à la souris
+ *
+ *  Inspiré par Gather · 聚 de DAO.
  */
 (function (root) {
   "use strict";
@@ -44,6 +46,7 @@
     trkFl: 0.8,
     trkSz: 1,
     trkSpr: 1,
+    trkMag: 1,
     mtrail: true,
     rep: 0.6,
     repR: 130,
@@ -599,6 +602,8 @@
       TK.k = new Float32Array(N);
       TK.ps = new Float32Array(N).fill(1);
       TK.w = new Float32Array(N);
+      TK.al = new Float32Array(N).fill(1);
+      TK.sp = new Float32Array(N);
       while (i < N && tries < N * 250) {
         tries++;
         var px = 1 + ((Math.random() * (im.w - 2)) | 0),
@@ -639,7 +644,8 @@
         R = Math.max(260, Math.min(W, H) * 0.55);
       var kmul = 3.4 - 2.95 * S.trkFl,
         damp = 0.6 + 0.34 * S.trkFl,
-        spr = S.trkSpr;
+        spr = S.trkSpr,
+        mag = S.trkMag;
       for (var i = 0; i < L; i++) {
         var hx = TK.hx[i],
           hy = TK.hy[i],
@@ -674,14 +680,14 @@
           Y = PY,
           wi = TK.w[i];
         TK.ps[i] = PS;
-        X += (mouse.ptx - mcx) * wi * 0.55;
-        Y += (mouse.pty - mcy) * wi * 0.55;
+        X += (mouse.ptx - mcx) * wi * 0.55 * mag;
+        Y += (mouse.pty - mcy) * wi * 0.55 * mag;
         var gx = mouse.ptx - X,
           gy = mouse.pty - Y,
           gd = Math.sqrt(gx * gx + gy * gy);
         if (gd < R) {
           var f = 1 - gd / R;
-          f = f * f * (0.3 + 0.6 * wi);
+          f = Math.min(0.95, f * f * (0.3 + 0.6 * wi) * mag);
           X += gx * f;
           Y += gy * f;
         }
@@ -1084,6 +1090,7 @@
           grid = new Map(),
           i;
         for (i = 0; i < L; i++) {
+          if (TK.al[i] < 0.2) continue;
           var key = ((TK.y[i] * inv) | 0) * cols + ((TK.x[i] * inv) | 0);
           var arr = grid.get(key);
           if (arr) arr.push(i);
@@ -1095,6 +1102,7 @@
         ctx.beginPath();
         var count = 0;
         for (var j = 0; j < L && count < 5000; j++) {
+          if (TK.al[j] < 0.2) continue;
           var cx = (TK.x[j] * inv) | 0,
             cy = (TK.y[j] * inv) | 0;
           for (var oy = -1; oy <= 1; oy++)
@@ -1124,48 +1132,60 @@
           Math.round(clamp(8 * tz, 6, 22)) + "px system-ui, sans-serif";
         ctx.textAlign = "left";
         ctx.textBaseline = "alphabetic";
-        ctx.beginPath();
-        for (var t = 0; t < L; t++) {
-          var x = TK.x[t],
-            y = TK.y[t],
-            h = (4 + TK.hz[t] * 8) * TK.ps[t] * tz;
-          if (S.track) {
-            var c = h * 0.6;
-            ctx.moveTo(x - h, y - h + c);
-            ctx.lineTo(x - h, y - h);
-            ctx.lineTo(x - h + c, y - h);
-            ctx.moveTo(x + h - c, y - h);
-            ctx.lineTo(x + h, y - h);
-            ctx.lineTo(x + h, y - h + c);
-            ctx.moveTo(x + h, y + h - c);
-            ctx.lineTo(x + h, y + h);
-            ctx.lineTo(x + h - c, y + h);
-            ctx.moveTo(x - h + c, y + h);
-            ctx.lineTo(x - h, y + h);
-            ctx.lineTo(x - h, y + h - c);
-            ctx.moveTo(x - 1.5 * tz, y);
-            ctx.lineTo(x + 1.5 * tz, y);
-            ctx.moveTo(x, y - 1.5 * tz);
-            ctx.lineTo(x, y + 1.5 * tz);
+        for (var lv = 4; lv >= 1; lv--) {
+          ctx.beginPath();
+          var any = false;
+          for (var t = 0; t < L; t++) {
+            var at = TK.al[t];
+            if (at < 0.05 || Math.min(4, Math.ceil(at * 4)) !== lv) continue;
+            any = true;
+            var x = TK.x[t],
+              y = TK.y[t],
+              h = (4 + TK.hz[t] * 8) * TK.ps[t] * tz;
+            if (S.track) {
+              var c = h * 0.6;
+              ctx.moveTo(x - h, y - h + c);
+              ctx.lineTo(x - h, y - h);
+              ctx.lineTo(x - h + c, y - h);
+              ctx.moveTo(x + h - c, y - h);
+              ctx.lineTo(x + h, y - h);
+              ctx.lineTo(x + h, y - h + c);
+              ctx.moveTo(x + h, y + h - c);
+              ctx.lineTo(x + h, y + h);
+              ctx.lineTo(x + h - c, y + h);
+              ctx.moveTo(x - h + c, y + h);
+              ctx.lineTo(x - h, y + h);
+              ctx.lineTo(x - h, y + h - c);
+              ctx.moveTo(x - 1.5 * tz, y);
+              ctx.lineTo(x + 1.5 * tz, y);
+              ctx.moveTo(x, y - 1.5 * tz);
+              ctx.lineTo(x, y + 1.5 * tz);
+            }
+            if (S.marks) {
+              var mk = 2.5 * tz;
+              ctx.moveTo(x - mk, y);
+              ctx.lineTo(x + mk, y);
+              ctx.moveTo(x, y - mk);
+              ctx.lineTo(x, y + mk);
+            }
           }
-          if (S.marks) {
-            var mk = 2.5 * tz;
-            ctx.moveTo(x - mk, y);
-            ctx.lineTo(x + mk, y);
-            ctx.moveTo(x, y - mk);
-            ctx.lineTo(x, y + mk);
+          if (any) {
+            ctx.globalAlpha = lv / 4;
+            ctx.stroke();
+            ctx.globalAlpha = 1;
           }
         }
-        ctx.stroke();
         if (S.track) {
           var step = Math.max(1, Math.round(L / 16));
+          var sg = function (v) {
+            return (v < 0 ? "-" : "+") + Math.abs(v).toFixed(2);
+          };
           for (var u = 0; u < L; u += step) {
+            if (TK.al[u] < 0.6) continue;
             var nx = (TK.hx[u] - im.w / 2) / (im.w / 2),
               ny = -(TK.hy[u] - im.h / 2) / (im.h / 2),
               nz = TK.hz[u] - 0.5;
-            var sg = function (v) {
-              return (v < 0 ? "-" : "+") + Math.abs(v).toFixed(2);
-            };
+            ctx.globalAlpha = TK.al[u];
             ctx.fillText(
               (u + 1 < 10 ? "0" : "") +
                 (u + 1) +
@@ -1179,6 +1199,7 @@
               TK.y[u] - TK.hz[u] * 8 * TK.ps[u] * tz + 3
             );
           }
+          ctx.globalAlpha = 1;
         }
       }
     }
